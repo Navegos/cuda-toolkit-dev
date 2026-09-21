@@ -25,31 +25,30 @@ jobs:
       matrix:
         os:
           [
-            windows-2025,
-            windows-2022,
+            ubuntu-26.04,
             ubuntu-24.04,
             ubuntu-22.04,
+            ubuntu-26.04-arm,
             ubuntu-24.04-arm,
-            ubuntu-22.04-arm
+            ubuntu-22.04-arm,
+            windows-2025-vs2026,
+            windows-2025,
+            windows-2022,
+            windows-11-vs2026-arm,
+            windows-11-arm
           ]
         method: [local, network]
-        include:
-          - os: windows-11-arm
-            method: local
-            cuda: '13.4.1'
-          - os: windows-11-arm
-            method: network
-            cuda: '13.4.1'
+        cuda: [13.2.0]
     runs-on: ${{ matrix.os }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Setup Node.js
         id: setup-node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version-file: .node-version
           cache: npm
@@ -73,7 +72,7 @@ jobs:
       - name: Run the action on this runner with method ${{matrix.method}}
         uses: ./
         with:
-          cuda: ${{ matrix.cuda || '13.2.0' }}
+          cuda: ${{ matrix.cuda }}
           method: ${{matrix.method}}
           log-file-suffix: '${{matrix.method}}-${{matrix.os}}'
 
@@ -93,7 +92,7 @@ jobs:
         id: test-action
         uses: ./
         with:
-          cuda: ${{ matrix.cuda || '13.2.0' }}
+          cuda: ${{ matrix.cuda }}
           method: ${{matrix.method}}
           sub-packages: '["nvcc"]'
           log-file-suffix: 'nvcc-${{matrix.method}}-${{matrix.os}}'
