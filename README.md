@@ -83,8 +83,8 @@ jobs:
         os: [ubuntu-22.04, ubuntu-20.04]
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: Jimver/cuda-toolkit@master
-      id: cuda-toolkit
+    - uses: Navegos/cuda-toolkit-dev@master
+      id: cuda-toolkit-dev
       with:
         log-file-suffix: '${{matrix.os}}.txt'
 
@@ -106,14 +106,14 @@ The path where cuda is installed (same as `CUDA_PATH` in `GITHUB_ENV`).
 
 ```yaml
 steps:
-- uses: Jimver/cuda-toolkit@v0.2.36
-  id: cuda-toolkit
+- uses: Navegos/cuda-toolkit-dev@v0.2.36
+  id: cuda-toolkit-dev
   with:
     cuda: '13.2.0'
 
-- run: echo "Installed cuda version is: ${{steps.cuda-toolkit.outputs.cuda}}"
+- run: echo "Installed cuda version is: ${{steps.cuda-toolkit-dev.outputs.cuda}}"
 
-- run: echo "Cuda install location: ${{steps.cuda-toolkit.outputs.CUDA_PATH}}"
+- run: echo "Cuda install location: ${{steps.cuda-toolkit-dev.outputs.CUDA_PATH}}"
 
 - run: nvcc -V
 ```
