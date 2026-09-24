@@ -22,7 +22,10 @@ export async function install(
   const arch = await getArch()
 
   if (arch === CPUArch.arm64) {
-    if (osType === OSType.linux && version.compare(firstLinuxArm64Version) < 0) {
+    if (
+      osType === OSType.linux &&
+      version.compare(firstLinuxArm64Version) < 0
+    ) {
       throw new Error(
         `CUDA ${version} does not support Linux ARM64 (sbsa). Minimum supported version is ${firstLinuxArm64Version}.`
       )

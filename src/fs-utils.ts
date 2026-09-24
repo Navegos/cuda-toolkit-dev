@@ -5,7 +5,7 @@ import * as core from '@actions/core'
 export async function getFilesRecursive(dir: string): Promise<string[]> {
   const results: string[] = []
   async function walk(current: string) {
-    const entries = await fs.promises.readdir(current, { withFileTypes: true })
+    const entries = await fs.promises.readdir(current, {withFileTypes: true})
     for (const entry of entries) {
       const fullPath = path.join(current, entry.name)
       if (entry.isDirectory()) {

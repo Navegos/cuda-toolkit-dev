@@ -1,4 +1,4 @@
-import { OSType, getOs, getRelease } from '../src/platform'
+import {OSType, getOs, getRelease} from '../src/platform'
 import os from 'os'
 
 test.concurrent('Return either windows of linux platform', async () => {

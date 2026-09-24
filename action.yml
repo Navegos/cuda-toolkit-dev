@@ -1,6 +1,6 @@
 name: 'cuda-toolkit-dev'
 description: 'Installs NVIDIA CUDA Toolkit and adds it to PATH'
-author: 'Jim Verheijde'
+author: 'Jim Verheijde, Navegos'
 inputs:
   cuda:
     description: 'Cuda version'
@@ -41,13 +41,11 @@ inputs:
     required: false
     default: '["--toolkit", "--samples"]'
   use-github-cache:
-    description:
-      'Use GitHub cache to cache downloaded installer on GitHub servers'
+    description: 'Use GitHub cache to cache downloaded installer on GitHub servers'
     required: false
     default: 'true'
   use-local-cache:
-    description:
-      'Use local cache to cache downloaded installer on the local runner'
+    description: 'Use local cache to cache downloaded installer on the local runner'
     required: false
     default: 'true'
   log-file-suffix:

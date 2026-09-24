@@ -76,8 +76,7 @@ jobs:
           method: ${{matrix.method}}
           log-file-suffix: '${{matrix.method}}-${{matrix.os}}'
 
-      - name:
-          Run the action on this runner with nvcc and libcublas subpackages
+      - name: Run the action on this runner with nvcc and libcublas subpackages
           (Linux)
         if: runner.os == 'Linux' && matrix.method == 'network'
         uses: ./

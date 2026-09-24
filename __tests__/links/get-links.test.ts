@@ -1,6 +1,6 @@
-import { LinuxLinks } from '../../src/links/linux-links'
-import { WindowsLinks } from '../../src/links/windows-links'
-import { getLinks } from '../../src/links/get-links'
+import {LinuxLinks} from '../../src/links/linux-links'
+import {WindowsLinks} from '../../src/links/windows-links'
+import {getLinks} from '../../src/links/get-links'
 
 test.concurrent('getLinks gives a valid ILinks class', async () => {
   try {

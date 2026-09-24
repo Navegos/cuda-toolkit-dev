@@ -1,10 +1,10 @@
-import { Method } from '../src/method'
-import { SemVer } from 'semver'
-import { getVersion } from '../src/version'
+import {Method} from '../src/method'
+import {SemVer} from 'semver'
+import {getVersion} from '../src/version'
 
 test.concurrent.each<Method>(['local', 'network'])(
   'Successfully parse correct version for method %s',
-  async (method) => {
+  async method => {
     const versionString = '11.2.2'
     try {
       const version = await getVersion(versionString, method)
@@ -19,7 +19,7 @@ test.concurrent.each<Method>(['local', 'network'])(
 
 test.concurrent.each<Method>(['local', 'network'])(
   'Expect error to be thrown on invalid version string for method %s',
-  async (method) => {
+  async method => {
     const versionString =
       'invalid version string that does not conform to semver'
     await expect(getVersion(versionString, method)).rejects.toThrow(
@@ -30,7 +30,7 @@ test.concurrent.each<Method>(['local', 'network'])(
 
 test.concurrent.each<Method>(['local', 'network'])(
   'Expect error to be thrown on unavailable version for method %s',
-  async (method) => {
+  async method => {
     const versionString = '0.0.1'
     try {
       await expect(getVersion(versionString, method)).rejects.toThrow(

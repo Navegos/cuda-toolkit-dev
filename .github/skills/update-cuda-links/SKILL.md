@@ -1,7 +1,6 @@
 ---
 name: update-cuda-links
-description:
-  'Updates CUDA download URL maps for new patch releases in
+description: 'Updates CUDA download URL maps for new patch releases in
   src/links/windows-links.ts and src/links/linux-links.ts.'
 user-invocable: true
 ---

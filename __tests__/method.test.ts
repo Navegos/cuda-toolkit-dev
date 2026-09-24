@@ -1,8 +1,8 @@
-import { parseMethod } from '../src/method'
+import {parseMethod} from '../src/method'
 
 test.concurrent.each(['local', 'network'])(
   'Parse %s method',
-  async (methodString) => {
+  async methodString => {
     const parsed = parseMethod(methodString)
     expect(parsed).toBe(methodString)
   }

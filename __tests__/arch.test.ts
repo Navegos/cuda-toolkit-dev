@@ -1,4 +1,4 @@
-import { CPUArch, getArch } from '../src/arch'
+import {CPUArch, getArch} from '../src/arch'
 import os from 'os'
 
 test.concurrent('Return either x64 or arm64 architecture', async () => {

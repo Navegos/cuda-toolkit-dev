@@ -1,13 +1,13 @@
 import fs from 'fs'
 import os from 'os'
 import path from 'path'
-import { getFilesRecursive, filterReadable } from '../src/fs-utils.js'
+import {getFilesRecursive, filterReadable} from '../src/fs-utils.js'
 
 describe('fs-utils', () => {
   const tmpRoot = path.join(os.tmpdir(), `cuda-toolkit-test-${Date.now()}`)
 
   beforeAll(async () => {
-    await fs.promises.mkdir(tmpRoot, { recursive: true })
+    await fs.promises.mkdir(tmpRoot, {recursive: true})
     // create files and nested directories
     await fs.promises.mkdir(path.join(tmpRoot, 'subdir'))
     await fs.promises.writeFile(path.join(tmpRoot, 'a.txt'), 'a')
@@ -30,13 +30,13 @@ describe('fs-utils', () => {
     } catch {
       // ignore
     }
-    await fs.promises.rm(tmpRoot, { recursive: true, force: true })
+    await fs.promises.rm(tmpRoot, {recursive: true, force: true})
   })
 
   test('getFilesRecursive returns all files under directory', async () => {
     const files = await getFilesRecursive(tmpRoot)
 
-    const normalizedNames = files.map((f) => path.relative(tmpRoot, f)).sort()
+    const normalizedNames = files.map(f => path.relative(tmpRoot, f)).sort()
 
     expect(normalizedNames).toEqual(
       ['a.txt', 'noaccess.txt', path.join('subdir', 'b.txt')].sort()

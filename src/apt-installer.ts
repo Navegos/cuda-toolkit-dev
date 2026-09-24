@@ -29,7 +29,9 @@ export async function aptSetup(version: SemVer): Promise<void> {
     cpuArch = await getArch()
   } catch (error) {
     core.debug(`Error detecting architecture: ${error}`)
-    core.warning(`Could not detect architecture, using default ${CPUArch.x86_64}`)
+    core.warning(
+      `Could not detect architecture, using default ${CPUArch.x86_64}`
+    )
   }
 
   if (cpuArch === CPUArch.arm64) {
@@ -82,7 +84,10 @@ export async function aptInstall(
 
   try {
     const cpuArch = await getArch()
-    if (cpuArch === CPUArch.arm64 && version.compare(firstLinuxArm64Version) < 0) {
+    if (
+      cpuArch === CPUArch.arm64 &&
+      version.compare(firstLinuxArm64Version) < 0
+    ) {
       throw new Error(
         `CUDA ${version} does not support Linux ARM64 (sbsa). Minimum supported version is ${firstLinuxArm64Version}.`
       )
@@ -120,6 +125,10 @@ export async function aptInstall(
           `${nonCudaSubPackage}-${version.major}-${version.minor}`
       )
     core.debug(`Only install subpackages: ${versionedSubPackages}`)
-    return await exec(`sudo apt-get -y install`, versionedSubPackages, execOptions)
+    return await exec(
+      `sudo apt-get -y install`,
+      versionedSubPackages,
+      execOptions
+    )
   }
 }

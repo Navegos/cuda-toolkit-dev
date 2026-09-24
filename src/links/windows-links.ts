@@ -572,7 +572,7 @@ export class WindowsLinks extends AbstractLinks {
 
   getAvailableNetworkCudaVersions(): SemVer[] {
     return Array.from(this.cudaVersionToNetworkUrl.keys()).map(
-      (s) => new SemVer(s)
+      s => new SemVer(s)
     )
   }
 

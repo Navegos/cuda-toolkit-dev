@@ -1,7 +1,7 @@
-import { jest } from '@jest/globals'
-import { SemVer } from 'semver'
+import {jest} from '@jest/globals'
+import {SemVer} from 'semver'
 import os from 'os'
-import { WindowsLinks } from '../../src/links/windows-links'
+import {WindowsLinks} from '../../src/links/windows-links'
 
 const nvidia = 'https://developer.download.nvidia.com/compute/cuda'
 
@@ -87,7 +87,7 @@ describe('Windows links on arm64', () => {
   // excp: 12.9.2 carries x86 suffix fpr who knows what reason...
   test.each(['13.3.1', '12.9.2', '11.8.0'])(
     'version %s without an arm64 build throws a descriptive error',
-    async (versionString) => {
+    async versionString => {
       const version = new SemVer(versionString)
       await expect(
         WindowsLinks.Instance.getLocalURLFromCudaVersion(version)
