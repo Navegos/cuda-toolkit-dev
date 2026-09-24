@@ -226321,5 +226321,5 @@ async function run() {
         }
     }
 }
-run();
+await run();
 //# sourceMappingURL=index.js.map
