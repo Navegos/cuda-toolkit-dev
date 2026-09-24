@@ -1,11 +1,11 @@
 name: 'cuda-toolkit-dev'
 description: 'Installs NVIDIA CUDA Toolkit and adds it to PATH'
-author: 'Jim Verheijde, Navegos'
+author: 'Jim Verheijde, DevelVitorF, Navegos'
 inputs:
   cuda:
     description: 'Cuda version'
     required: false
-    default: '13.2.0'
+    default: '13.4.2'
   sub-packages:
     description:
       'Only installs specified subpackages, must be in the form of a JSON array.

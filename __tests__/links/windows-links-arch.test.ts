@@ -97,9 +97,8 @@ describe('Windows links on arm64', () => {
       ).rejects.toThrow('does not provide a Windows arm64 installer')
     }
   )
-
   test('arm64 links are derived for every version with an x86 split', async () => {
-    const arm64Versions = ['13.4.1']
+    const arm64Versions = ['13.4.1', '13.4.2']
     for (const versionString of arm64Versions) {
       const version = new SemVer(versionString)
       const local =

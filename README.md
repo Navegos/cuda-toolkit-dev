@@ -13,7 +13,7 @@ subsequent steps.
 | :----------------------- | :--------------------------------------------------------- | :--------------- | :---------------------- |
 | **Ubuntu Linux**         | `ubuntu-26.04`, `ubuntu-24.04`, `ubuntu-22.04`             | `x86_64` (`x64`) | `8.0.61` – `13.4.2`     |
 | **Ubuntu Linux (ARM64)** | `ubuntu-26.04-arm`, `ubuntu-24.04-arm`, `ubuntu-22.04-arm` | `arm64` (`sbsa`) | `>= 11.0.1` – `13.4.2`  |
-| **Windows**              | `windows-2025`, `windows-2022`                             | `x86_64` (`x64`) | `8.0.61` – `13.4.2`     |
+| **Windows**              | `windows-2025-vs2026`, `windows-2025`, `windows-2022`      | `x86_64` (`x64`) | `8.0.61` – `13.4.2`     |
 | **Windows (ARM64)**      | `windows-11-arm`, `windows-11-vs2026-arm`                  | `arm64`          | `>= 13.4.1` – `13.4.2`  |
 
 > **Note on ARM64:**
@@ -28,7 +28,7 @@ subsequent steps.
 **Optional** The CUDA version to install. View `src/links/windows-links.ts` and
 `src/links/linux-links.ts` for available versions.
 
-Default: `'13.2.0'`.
+Default: `'13.4.2'`.
 
 ### `method`
 
