@@ -1,6 +1,6 @@
-import { AbstractLinks } from './links.js'
-import { SemVer } from 'semver'
-import { CPUArch, getArch } from '../arch.js'
+import {AbstractLinks} from './links.js'
+import {SemVer} from 'semver'
+import {CPUArch, getArch} from '../arch.js'
 
 // # Dictionary of known cuda versions and thier download URLS, which do not follow a consistent pattern :(
 // $CUDA_KNOWN_URLS = @{

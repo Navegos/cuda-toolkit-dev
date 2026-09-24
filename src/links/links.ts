@@ -1,4 +1,4 @@
-import { SemVer } from 'semver'
+import {SemVer} from 'semver'
 
 // Interface for getting cuda versions and corresponding download URLs
 export abstract class AbstractLinks {

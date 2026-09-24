@@ -1,12 +1,12 @@
 import * as core from '@actions/core'
-import { Method, parseMethod } from './method.js'
-import { OSType, getOs } from './platform.js'
-import { aptInstall, aptSetup, useApt } from './apt-installer.js'
-import { download } from './downloader.js'
-import { getVersion } from './version.js'
-import { install } from './installer.js'
-import { updatePath } from './update-path.js'
-import { parsePackages } from './parser.js'
+import {Method, parseMethod} from './method.js'
+import {OSType, getOs} from './platform.js'
+import {aptInstall, aptSetup, useApt} from './apt-installer.js'
+import {download} from './downloader.js'
+import {getVersion} from './version.js'
+import {install} from './installer.js'
+import {updatePath} from './update-path.js'
+import {parsePackages} from './parser.js'
 
 async function run(): Promise<void> {
   try {

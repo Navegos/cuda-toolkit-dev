@@ -103,3 +103,9 @@ __tests__/runner/*
 
 # Ignore Github context-mode
 .github/context-mode/
+
+#Ignore vscode AI rules
+.github/instructions/
+
+#Ignore codegraph
+.codegraph/

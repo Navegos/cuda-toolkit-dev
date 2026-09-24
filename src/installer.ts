@@ -1,10 +1,14 @@
-import { DefaultArtifactClient } from '@actions/artifact'
+import {DefaultArtifactClient} from '@actions/artifact'
 import * as core from '@actions/core'
-import { filterReadable } from './fs-utils.js'
-import { OSType, getOs, getRelease } from './platform.js'
-import { SemVer } from 'semver'
-import { exec } from '@actions/exec'
+import {filterReadable} from './fs-utils.js'
+import {OSType, getOs, getRelease} from './platform.js'
+import {SemVer} from 'semver'
+import {exec} from '@actions/exec'
+import {CPUArch, getArch} from './arch.js'
 import * as os from 'os'
+
+export const firstLinuxArm64Version = new SemVer('11.0.1')
+export const firstWindowsArm64Version = new SemVer('13.4.1')
 
 export async function install(
   executablePath: string,
@@ -14,12 +18,31 @@ export async function install(
   method: string,
   logFileSuffix: string
 ): Promise<void> {
+  const osType = await getOs()
+  const arch = await getArch()
+
+  if (arch === CPUArch.arm64) {
+    if (osType === OSType.linux && version.compare(firstLinuxArm64Version) < 0) {
+      throw new Error(
+        `CUDA ${version} does not support Linux ARM64 (sbsa). Minimum supported version is ${firstLinuxArm64Version}.`
+      )
+    }
+    if (
+      osType === OSType.windows &&
+      version.compare(firstWindowsArm64Version) < 0
+    ) {
+      throw new Error(
+        `CUDA ${version} does not support Windows ARM64. Minimum supported version is ${firstWindowsArm64Version}.`
+      )
+    }
+  }
+
   // Install arguments, see: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#runfile-advanced
   // and https://docs.nvidia.com/cuda/cuda-installation-guide-microsoft-windows/index.html
-  let installArgs: string[]
+  let installArgs: string[] = []
 
   // Command string that is executed
-  let command: string
+  let command = ''
 
   // Subset of subpackages to install instead of everything, see: https://docs.nvidia.com/cuda/cuda-installation-guide-microsoft-windows/index.html#install-cuda-software
   const subPackages: string[] = subPackagesArray
@@ -37,7 +60,7 @@ export async function install(
   }
 
   // Configure OS dependent run command and args
-  switch (await getOs()) {
+  switch (osType) {
     case OSType.linux:
       // Root permission needed on linux
       command = `sudo ${executablePath}`
@@ -51,7 +74,7 @@ export async function install(
       installArgs = ['-s']
       // Add subpackages to command args (if any)
       installArgs = installArgs.concat(
-        subPackages.map((subPackage) => {
+        subPackages.map(subPackage => {
           // Display driver sub package name is not dependent on version
           if (subPackage === 'Display.Driver') {
             return subPackage
@@ -60,6 +83,8 @@ export async function install(
         })
       )
       break
+    default:
+      throw new Error(`Unsupported OS: ${osType}`)
   }
 
   // Run installer
@@ -72,7 +97,6 @@ export async function install(
     throw error
   } finally {
     // Always upload installation log regardless of error
-    const osType = await getOs()
     const osRelease = await getRelease()
     if (osType === OSType.linux) {
       const artifactName = `cuda-install-${osType}-${osRelease}-${method}-${logFileSuffix}`

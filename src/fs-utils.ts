@@ -26,12 +26,12 @@ export async function getFilesRecursive(dir: string): Promise<string[]> {
 
 export async function filterReadable(paths: string[]): Promise<string[]> {
   const readable: string[] = []
-  for (const path of paths) {
+  for (const p of paths) {
     try {
-      await fs.promises.access(path, fs.constants.R_OK)
-      readable.push(path)
+      await fs.promises.access(p, fs.constants.R_OK)
+      readable.push(p)
     } catch (e) {
-      core.debug(`Path not readable: ${path} - ${e}`)
+      core.debug(`Path not readable: ${p} - ${e}`)
     }
   }
   return readable

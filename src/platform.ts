@@ -1,4 +1,4 @@
-import { debug } from '@actions/core'
+import {debug} from '@actions/core'
 import os from 'os'
 
 export enum OSType {
@@ -15,7 +15,9 @@ export async function getOs(): Promise<OSType> {
       return OSType.linux
     default:
       debug(`Unsupported OS: ${osPlatform}`)
-      throw new Error(`Unsupported OS: ${osPlatform}`)
+      throw new Error(
+        `Unsupported OS: ${osPlatform}. Only Windows and Linux are supported.`
+      )
   }
 }
 

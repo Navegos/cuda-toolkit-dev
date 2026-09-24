@@ -1,16 +1,20 @@
 import * as core from '@actions/core'
-import * as path from 'path'
-import { OSType, getOs } from './platform.js'
-import { SemVer } from 'semver'
+import * as path from 'node:path'
+import {OSType, getOs} from './platform.js'
+import {SemVer} from 'semver'
 
 export async function updatePath(version: SemVer): Promise<string> {
+  const osType = await getOs()
   let cudaPath: string
-  switch (await getOs()) {
+  switch (osType) {
     case OSType.linux:
       cudaPath = `/usr/local/cuda-${version.major}.${version.minor}`
       break
     case OSType.windows:
-      cudaPath = `C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v${version.major}.${version.minor}`
+      cudaPath = String.raw`C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v${version.major}.${version.minor}`
+      break
+    default:
+      throw new Error('Unsupported operating system detected for CUDA setup')
   }
   core.debug(`Cuda path: ${cudaPath}`)
   // Export $CUDA_PATH
@@ -24,27 +28,27 @@ export async function updatePath(version: SemVer): Promise<string> {
   )
   // Add $CUDA_PATH/bin to $PATH
   const binPath = path.join(cudaPath, 'bin')
-  core.debug(`Adding to PATH: ${binPath}`)
+  core.debug(`Adding binaries folder to PATH: ${binPath}`)
   core.addPath(binPath)
 
   // Update LD_LIBRARY_PATH on linux, see: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#environment-setup
-  if ((await getOs()) === OSType.linux) {
-    // Get LD_LIBRARY_PATH
-    const libPath = process.env.LD_LIBRARY_PATH
-      ? process.env.LD_LIBRARY_PATH
-      : ''
+  if (osType === OSType.linux) {
+    const libPath = process.env.LD_LIBRARY_PATH ?? ''
+
     // Get CUDA lib path
     const cudaLibPath = path.join(cudaPath, 'lib64')
-    // Check if CUDA lib path is already in LD_LIBRARY_PATH
+
+    // Add path reference array checks to protect against duplicate definitions
     if (!libPath.split(':').includes(cudaLibPath)) {
-      // CUDA lib is not in LD_LIBRARY_PATH, so add it
-      core.debug(`Adding to LD_LIBRARY_PATH: ${cudaLibPath}`)
+      core.debug(
+        `Appending tracking context to LD_LIBRARY_PATH: ${cudaLibPath}`
+      )
       core.exportVariable(
         'LD_LIBRARY_PATH',
-        cudaLibPath + path.delimiter + libPath
+        libPath ? `${cudaLibPath}${path.delimiter}${libPath}` : cudaLibPath
       )
     }
   }
-  // Return cuda path
+
   return cudaPath
 }

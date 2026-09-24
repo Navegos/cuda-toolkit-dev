@@ -1,13 +1,16 @@
-import { SemVer } from 'semver'
-import { AbstractLinks } from './links.js'
-import { CPUArch, getArch } from '../arch.js'
+import {SemVer} from 'semver'
+import {AbstractLinks} from './links.js'
+import {CPUArch, getArch} from '../arch.js'
 
 /**
- * Singleton class for windows links.
+ * Singleton class for linux links.
  */
 export class LinuxLinks extends AbstractLinks {
   // Singleton instance
   private static _instance: LinuxLinks
+
+  // First CUDA release that ships a dedicated Linux arm64 (sbsa) installer
+  private static readonly firstArm64Version = new SemVer('11.0.1')
 
   // Private constructor to prevent instantiation
   private constructor() {
@@ -285,6 +288,11 @@ export class LinuxLinks extends AbstractLinks {
     const link = await super.getLocalURLFromCudaVersion(version)
     const arch: CPUArch = await getArch()
     if (arch === CPUArch.arm64) {
+      if (version.compare(LinuxLinks.firstArm64Version) < 0) {
+        throw new Error(
+          `CUDA ${version} does not provide a Linux arm64 (sbsa) installer (arm64 builds are available from ${LinuxLinks.firstArm64Version})`
+        )
+      }
       return new URL(link.toString().replace('_linux.run', '_linux_sbsa.run'))
     } else {
       return link

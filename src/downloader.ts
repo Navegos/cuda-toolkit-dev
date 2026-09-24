@@ -2,15 +2,15 @@ import * as cache from '@actions/cache'
 import * as core from '@actions/core'
 import * as tc from '@actions/tool-cache'
 import * as io from '@actions/io'
-import { OSType, getOs, getRelease } from './platform.js'
-import { AbstractLinks } from './links/links.js'
-import { Method } from './method.js'
-import { SemVer } from 'semver'
-import { WindowsLinks } from './links/windows-links.js'
+import {OSType, getOs, getRelease} from './platform.js'
+import {AbstractLinks} from './links/links.js'
+import {Method} from './method.js'
+import {SemVer} from 'semver'
+import {WindowsLinks} from './links/windows-links.js'
 import fs from 'fs'
-import { getLinks } from './links/get-links.js'
-import { getArch } from './arch.js'
-import { getFilesRecursive } from './fs-utils.js'
+import {getLinks} from './links/get-links.js'
+import {getArch} from './arch.js'
+import {getFilesRecursive} from './fs-utils.js'
 
 // Download helper which returns the installer executable and caches it for next runs
 export async function download(
@@ -29,6 +29,8 @@ export async function download(
   let executableDirectory: string | undefined
   const cacheKey = `${toolId}-${version}`
   const cacheDirectory = cacheKey
+
+  // First try to find tool with desired version in tool cache (local to machine)
   if (useLocalCache) {
     const toolPath = tc.find(toolId, `${version}`)
     if (toolPath) {
@@ -39,8 +41,9 @@ export async function download(
       core.debug(`Not found in local cache`)
     }
   }
+
+  // Second option, get tool from GitHub cache if enabled
   if (executableDirectory === undefined && useGitHubCache) {
-    // Second option, get tool from GitHub cache if enabled
     const cacheResult: string | undefined = await cache.restoreCache(
       [cacheDirectory],
       cacheKey
@@ -52,8 +55,9 @@ export async function download(
       core.debug(`Not found in GitHub cache`)
     }
   }
+
+  // Final option, download tool from NVIDIA servers
   if (executableDirectory === undefined) {
-    // Final option, download tool from NVIDIA servers
     core.debug(`Not found in local/GitHub cache, downloading...`)
     // Get download URL
     const url: URL = await getDownloadURL(method, version)
@@ -70,12 +74,13 @@ export async function download(
     } else {
       core.debug(`File at ${destFilePath} already exists, skipping download`)
     }
+
     if (useLocalCache) {
       // Cache download to local machine cache
       const localCacheDirectory = await tc.cacheFile(
         destFilePath,
         destFileName,
-        `${toolName}-${osType}-${cpuArch}`,
+        toolId,
         `${version}`
       )
       core.debug(
@@ -142,6 +147,8 @@ function getFileExtension(osType: OSType): string {
       return 'exe'
     case OSType.linux:
       return 'run'
+    default:
+      throw new Error(`Unsupported OS: ${osType}`)
   }
 }
 
